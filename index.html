@@ -338,7 +338,7 @@
                 
                 setTimeout(() => {
                     isBouquetStage = true;
-                    statusText.innerText = `ดอกไม้สำหรับเธอ💗\nลองกดที่ช่อดอกไม้สิ!`;
+                    statusText.innerText = `ดอกไม้สำหรับอ้วน💗\nลองกดที่ช่อดอกไม้สิ!`;
                     
                     plantImg.style.cursor = 'pointer';
                     plantImg.onclick = () => {
@@ -359,18 +359,13 @@
             statusText.style.opacity = "0";
             plantContainer.onclick = null;
 
-            const positions = [
-                {x: -115, y: -145}, {x: 8, y: -158}, {x: 112, y: -135},
-                {x: -125, y: -45},                    {x: 122, y: -55}, 
-                {x: -118, y: 48},                     {x: 126, y: 38},  
-                {x: -105, y: 135},  {x: -6, y: 155},  {x: 115, y: 128}, 
-                {x: 4, y: -38}                                          
+            /* จัดเรียงรูป photo1 - photo10 และจดหมาย เป็นระเบียบจากซ้ายไปขวา (4 แถว x 3 คอลัมน์) */
+            const gridLayouts = [
+                {x: -105, y: -155}, {x: 0, y: -155}, {x: 105, y: -155}, // photo1, photo2, photo3
+                {x: -105, y: -55},  {x: 0, y: -55},  {x: 105, y: -55},  // photo4, photo5, photo6
+                {x: -105, y: 45},   {x: 0, y: 45},   {x: 105, y: 45},   // photo7, photo8, photo9
+                {x: -55,  y: 150}                                       // photo10 (แถวล่างซ้าย)
             ];
-
-            for (let i = positions.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [positions[i], positions[j]] = [positions[j], positions[i]];
-            }
 
             for (let i = 0; i < 10; i++) {
                 const img = document.createElement('img');
@@ -380,37 +375,21 @@
                 img.onclick = (e) => { e.stopPropagation(); showPhoto(img, img.src, captions[i]); };
                 document.body.appendChild(img);
                 
-                const pos = positions[i];
-                const jitterX = (Math.random() - 0.5) * 24;
-                const jitterY = (Math.random() - 0.5) * 24;
-                const finalX = pos.x + jitterX;
-                const finalY = pos.y + jitterY;
-                
-                /* บังคับให้รูปเอียงเล็กน้อยอย่างเป็นธรรมชาติ (ไม่เป็น 0 องศา) */
-                const sign = Math.random() < 0.5 ? -1 : 1;
-                const rotate = sign * (6 + Math.random() * 12);
+                const item = gridLayouts[i];
 
                 setTimeout(() => {
-                    img.style.left = `calc(50% + ${finalX}px)`;
-                    img.style.top = `calc(50% + ${finalY}px)`;
-                    img.style.transform = `translate(-50%, -50%) rotate(${rotate}deg) scale(1)`;
+                    img.style.left = `calc(50% + ${item.x}px)`;
+                    img.style.top = `calc(50% + ${item.y}px)`;
+                    img.style.transform = `translate(-50%, -50%) rotate(0deg) scale(1)`;
                 }, i * 60);
             }
 
-            const boxPos = positions[10];
-            const boxJitterX = (Math.random() - 0.5) * 14;
-            const boxJitterY = (Math.random() - 0.5) * 14;
-            const boxFinalX = boxPos.x + boxJitterX;
-            const boxFinalY = boxPos.y + boxJitterY;
-            const boxSign = Math.random() < 0.5 ? -1 : 1;
-            const boxRotate = boxSign * (4 + Math.random() * 8);
-
             boxBtn.style.display = "block";
             setTimeout(() => {
-                boxBtn.style.left = `calc(50% + ${boxFinalX}px)`;
-                boxBtn.style.top = `calc(50% + ${boxFinalY}px)`;
-                boxBtn.style.transform = `translate(-50%, -50%) rotate(${boxRotate}deg) scale(1)`;
-            }, 100);
+                boxBtn.style.left = `calc(50% + 55px)`; // จดหมายอยู่ต่อจาก photo10 (แถวล่างขวา)
+                boxBtn.style.top = `calc(50% + 150px)`;
+                boxBtn.style.transform = `translate(-50%, -50%) rotate(0deg) scale(1)`;
+            }, 600);
         }
 
         let currentOriginElement = null;
